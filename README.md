@@ -70,13 +70,13 @@ npm run test
 /public        → Static assets
 ```
 
-## 📌 TODO (Next Milestones)
-- [ ] Stellar pre-auth transactions
-- [ ] Telegram OTP verification
-- [ ] Recipient claim flow with wallet connect
+## 📌 DONE 
+- [ + ] Stellar pre-auth transactions
+- [ + ] Telegram OTP verification
+- [ + ] Recipient claim flow with wallet connect
 - [ ] SDF Grant Application Submission
 - [ ] Dashboard for tracking transactions
-- [ ] Mobile app (Q1 2026)
+- [ ] Mobile app for bulk transaction (Q1 2026)
 
 ## 📄 License
 MIT © 2025 Safepay Team
