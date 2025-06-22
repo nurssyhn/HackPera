@@ -29,7 +29,7 @@ export class EmailService {
     
   });
 
-   async sendMail(to : string): Promise<string> {
+   async sendMail(to : string,amount : string): Promise<string> {
     try {
         const token = await this.randomVerificationCodeGen();
         
@@ -39,7 +39,7 @@ export class EmailService {
         from: `"SafePay" <${process.env.SMTP_USER}>`,
         to : to,
         subject: 'Verification Email',
-        text : `http://localhost:3000/email/verify/${token}`
+        text : `http://localhost:7020/email/verify/${token}`
 
         
         
@@ -61,10 +61,10 @@ export class EmailService {
 
 
 }
-    async sendEmailWithList(to : string[]) : Promise<void> {
+    async sendEmailWithList(to : string[],amount : string[]) : Promise<void> {
         try {
-            to.forEach(async (email) => {
-                await this.sendMail(email);
+            to.forEach(async (email,amount) => {
+                await this.sendMail(email,amount.toString());
             }
         );
         } catch (error) {
@@ -83,7 +83,7 @@ export class EmailService {
     
 
   
-    async safePay(email : string,verifycode : string,publicKey : string) : Promise<any> {
+    async safePay(email : string,verifycode : string,publicKey : string,amount : string) : Promise<any> {
       const verifycodeOld = CodeMap.get(email)
       if(verifycodeOld !== verifycode)
       {
@@ -91,7 +91,7 @@ export class EmailService {
       }
       else{
         console.info("Verification Successful")
-         this.wallet.createTransaction(publicKey, "1"); // Assuming you want to send 1 XLM
+         this.wallet.createTransaction(publicKey, amount); // Assuming you want to send 1 XLM
         return {"message" : "Verification Successful", "publicKey" : publicKey, "email" : email}
         
       }

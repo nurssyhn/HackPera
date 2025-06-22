@@ -9,7 +9,7 @@ interface SendMailOptions {
 }
 
 const TokenMap = new Map<string,string>;
-
+const amountMap = new Map<string,string>;
 @Controller('email')
 export class EmailController {
     constructor(private readonly emailService: EmailService) {}
@@ -17,10 +17,11 @@ export class EmailController {
 
 
     @Post('send')
-    async sendEmail(@Body() selam : SendMailOptions): Promise<void> {
+    async sendEmail(@Body() selam : SendMailOptions, amount : string): Promise<void> {
         try {
-           const token = await this.emailService.sendMail(selam.to);
+           const token = await this.emailService.sendMail(selam.to,amount);
            TokenMap.set(token,selam.to)
+           amountMap.set(selam.to,amount);
             console.log('Email sent successfully');
         } catch (error) {
             console.error('Error sending email:', error);
@@ -38,7 +39,12 @@ export class EmailController {
         {
             throw new Error("Wrong Url")
         }
-        await this.emailService.safePay(email,verifycode,publicKey)
+        const amount = amountMap.get(email);
+        if(!amount)
+        {
+            throw new Error("Amount not found for this email");
+        }
+        await this.emailService.safePay(email,verifycode,publicKey,amount)
         return { message: 'Verification successful and payment requested.' };
     }
 
@@ -50,16 +56,7 @@ export class EmailController {
         if (!email) {
             throw new Error('Invalid token');
         }
-        res.type('text/html');
-        return res.send(`<form action="http://localhost:3000/email/verify/${token}" method="POST">
-  <label>Telegram Doğrulama Kodu:</label><br/>
-  <input type="text" name="code" /><br/><br/>
-  
-  <label>Stellar Public Key:</label><br/>
-  <input type="text" name="publicKey" /><br/><br/>
-  
-  <button type="submit">Doğrula ve Parayı Talep Et</button>
-</form>`)
+        return res.redirect("http://localhost:3000/process")
     }
 
 }

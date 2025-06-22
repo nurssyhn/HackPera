@@ -90,7 +90,7 @@ export class EscrowService {
       const result = await this.server.submitTransaction(transaction);
       return result;
     } catch (error) {
-      console.error('Transaction failed:', error);
+      console.error('Transaction failed:', error.response?.data || error.message);
       throw new InternalServerErrorException('Transaction failed');
     }
   }
