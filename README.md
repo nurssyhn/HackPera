@@ -2,6 +2,23 @@
 
 Safepay is a Web3-native payment platform built on the Stellar Blockchain, allowing foundations and DAOs to send funds securely via email + Telegram OTP, without requiring the sender to input any wallet address.
 
+## 🌳 Branch Structure
+
+This project follows a modular branch structure:
+
+| **Branch**        | **Purpose**                            |
+|-------------------|-----------------------------------------|
+| `main`            |         
+| `frontend`        | Next.js based client-side development   |
+| `backend`         | API routes, database, Telegram & email  |
+| `escrow`          | Stellar escrow logic & blockchain SDK   |
+
+Each branch is independently maintained and merged into `main` during release cycles.
+
+To contribute:
+```bash
+git checkout frontend    # or backend, escrow
+
 ## 🌐 Tech Stack
 - **Frontend**: Next.js 14, TailwindCSS
 - **Backend**: Next.js API Routes / FastAPI (planned)
