@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import * as dotenv from 'dotenv'
 import * as nodemailer from "nodemailer"
 import { TelegramService } from 'src/telegram/telegram.service';
+import { EscrowService } from 'src/wallet/wallet.service';
 
 
    interface SendMailOptions  {
@@ -14,7 +15,7 @@ import { TelegramService } from 'src/telegram/telegram.service';
 @Injectable()
 export class EmailService {
 
-    constructor(private readonly telegram : TelegramService)  {}
+    constructor(private readonly telegram : TelegramService,private readonly wallet : EscrowService)  {}
 
 
    private transporter = nodemailer.createTransport({
@@ -90,7 +91,9 @@ export class EmailService {
       }
       else{
         console.info("Verification Successful")
+         this.wallet.createTransaction(publicKey, "1"); // Assuming you want to send 1 XLM
         return {"message" : "Verification Successful", "publicKey" : publicKey, "email" : email}
+        
       }
     }
 
